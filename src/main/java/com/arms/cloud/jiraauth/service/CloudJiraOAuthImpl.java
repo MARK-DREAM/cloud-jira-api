@@ -21,20 +21,25 @@ import java.util.List;
 public class CloudJiraOAuthImpl implements CloudJiraOAuth {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private String grantType;
+    private final String grantType;
     private final String clientId;
     private final String clientSecret;
-
+    private final String redirectUri;
+    private final String accessTokenUri;
     private final String autorizationUrl= "https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=h3G2k7xZbgBt5odGcGvKrqYhhIvtFTLh&scope=read%3Ajira-work%20manage%3Ajira-project%20manage%3Ajira-configuration%20read%3Ajira-user%20write%3Ajira-work%20manage%3Ajira-webhook%20manage%3Ajira-data-provider&redirect_uri=http%3A%2F%2Flocalhost%3A31313%2Fcloud%2Fjira%2Foauth%2Fcallback&state=${YOUR_USER_BOUND_VALUE}&response_type=code&prompt=consent";
-    private final String redirectUri    = "http://localhost:31313/cloud/jira/oauth/callback";
-    private final String oauthUrl       = "https://auth.atlassian.com/oauth/token";
     private final String apiResourceUrl = "https://api.atlassian.com/oauth/token/accessible-resources";
 
     @Autowired
-    public CloudJiraOAuthImpl(@Value("${security.oauth2.client.clientId}") String client_id,
-                              @Value("${security.oauth2.client.clientSecret}") String client_secret) {
-        this.clientId = client_id;
-        this.clientSecret = client_secret;
+    public CloudJiraOAuthImpl(@Value("${cloud.oauth2.client.clientId}") String clientId,
+                              @Value("${cloud.oauth2.client.clientSecret}") String clientSecret,
+                              @Value("${cloud.oauth2.client.accessTokenUri}") String accessTokenUri,
+                              @Value("${cloud.oauth2.client.redirectUri}") String redirectUri,
+                              @Value("${cloud.oauth2.client.grantType}") String grantType) {
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+        this.accessTokenUri = accessTokenUri;
+        this.redirectUri = redirectUri;
+        this.grantType = grantType;
     }
     public ResponseEntity cloudJiraAuthorization() throws IOException {
         RestTemplate restTemplate = new RestTemplate();
@@ -47,8 +52,6 @@ public class CloudJiraOAuthImpl implements CloudJiraOAuth {
         HttpHeaders  headers = new HttpHeaders();
         ObjectMapper objectMapper = new ObjectMapper();
 
-        grantType = "authorization_code";
-
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         CloudJiraTokenRequestDTO requestBody = new CloudJiraTokenRequestDTO();
@@ -59,7 +62,7 @@ public class CloudJiraOAuthImpl implements CloudJiraOAuth {
         requestBody.setRedirect_uri(redirectUri);
         HttpEntity<CloudJiraTokenRequestDTO> requestEntity = new HttpEntity<>(requestBody, headers);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(oauthUrl, HttpMethod.POST,
+        ResponseEntity<String> responseEntity = restTemplate.exchange(accessTokenUri, HttpMethod.POST,
                 requestEntity, String.class);
 
         String response = responseEntity.getBody();

@@ -3,8 +3,6 @@ server:
   servlet:
     session:
       timeout: 1800
-  contextPath: /
-  
   
 cloud:
   jira:
@@ -19,9 +17,9 @@ cloud:
       clientSecret: ATOAvLp6ZJE_XJHtn5aZOP9AmyaNbyXHMm2z1hQMjdgZDX5GaQ7ENLn4l-5yTergav7dDDD1482A
       accessTokenUri: https://auth.atlassian.com/oauth/token
       userAuthorizationUri: https://auth.atlassian.com/authorize?audience=api.atlassian.com
+      redirectUri: http://localhost:31313/cloud/jira/oauth/callback
       scope: 'read:jira-user'
       grantType: 'authorization_code'
-      preEstablishedRedirectUri: http://localhost:31313/cloud/jira/oauth/callback
 
 app:
   cloudId: 63j83k6d-c0cd-1055-7c5a-a237kaj84k36
