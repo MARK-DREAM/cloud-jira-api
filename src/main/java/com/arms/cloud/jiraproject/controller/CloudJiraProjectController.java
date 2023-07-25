@@ -29,20 +29,20 @@ public class CloudJiraProjectController {
     
     @ResponseBody
     @RequestMapping(
-            value = {"/cloudMiningProjectDataToaRMS.do/{projectKey}"},
+            value = {"/getProject.do/{projectKey}"},
             method = {RequestMethod.GET}
     )
-    public CloudJiraProjectDTO cloudMiningProjectDataToaRMS(@PathVariable String projectKey, ModelMap model, HttpServletRequest request) throws Exception {
+    public CloudJiraProjectDTO getProjectData(@PathVariable String projectKey, ModelMap model, HttpServletRequest request) throws Exception {
         logger.info("Jira Cloud PROJECT GET API 호출");
         return cloudJiraProject.getProjectData(projectKey);
     }
 
     @ResponseBody
     @RequestMapping(
-            value = {"/cloudMiningProjectListDataToaRMS.do"},
+            value = {"/getProject.do"},
             method = {RequestMethod.GET}
     )
-    public List<CloudJiraProjectDTO> cloudMiningProjectListDataToaRMS(ModelMap model, HttpServletRequest request) throws Exception {
+    public List<CloudJiraProjectDTO> getProjectList(ModelMap model, HttpServletRequest request) throws Exception {
         logger.info("Jira Cloud ALL PROJECT GET API 호출");
         return cloudJiraProject.getProjectList();
     }
