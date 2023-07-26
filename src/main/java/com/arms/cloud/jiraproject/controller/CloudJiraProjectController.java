@@ -29,7 +29,7 @@ public class CloudJiraProjectController {
     
     @ResponseBody
     @RequestMapping(
-            value = {"/getProject.do/{projectKey}"},
+            value = {"/{projectKey}"},
             method = {RequestMethod.GET}
     )
     public CloudJiraProjectDTO getProjectData(@PathVariable String projectKey, ModelMap model, HttpServletRequest request) throws Exception {
@@ -39,7 +39,7 @@ public class CloudJiraProjectController {
 
     @ResponseBody
     @RequestMapping(
-            value = {"/getProject.do"},
+            value = {"/list"},
             method = {RequestMethod.GET}
     )
     public List<CloudJiraProjectDTO> getProjectList(ModelMap model, HttpServletRequest request) throws Exception {
