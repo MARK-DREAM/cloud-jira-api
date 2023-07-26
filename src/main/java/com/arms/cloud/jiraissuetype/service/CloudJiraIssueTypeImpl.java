@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -25,36 +24,36 @@ public class CloudJiraIssueTypeImpl implements CloudJiraIssueType {
 
 	@Override
 	public List<CloudJiraIssueTypeDTO> getIssueTypeList() throws Exception {
-        final WebClient jiraWebClient = cloudJiraConfig.getJiraWebClient();
+                final WebClient jiraWebClient = cloudJiraConfig.getJiraWebClient();
 
-        String endpoint = "/rest/api/3/issuetype";
+                String endpoint = "/rest/api/3/issuetype";
 
-        List<CloudJiraIssueTypeDTO> issueTypes = jiraWebClient.get()
-                .uri(endpoint)
-                .retrieve()
-                .bodyToMono(List.class).block();
+                List<CloudJiraIssueTypeDTO> issueTypes = jiraWebClient.get()
+                        .uri(endpoint)
+                        .retrieve()
+                        .bodyToMono(List.class).block();
 
-        logger.info(issueTypes.toString());
+                logger.info(issueTypes.toString());
 
-        return issueTypes;
+                return issueTypes;
 	}
 
 	@Override
 	public CloudJiraIssueTypeDTO createIssueType(CloudJiraIssueTypeInputDTO cloudJiraIssueTypeInputDTO)
 			throws Exception {
-        final WebClient jiraWebClient = cloudJiraConfig.getJiraWebClient();
+                final WebClient jiraWebClient = cloudJiraConfig.getJiraWebClient();
 
-        String endpoint = "/rest/api/3/issuetype";
+                String endpoint = "/rest/api/3/issuetype";
 
-        CloudJiraIssueTypeDTO addCloudJirarIssueTypeDTO = jiraWebClient.post()
-                .uri(endpoint)
-                .bodyValue(cloudJiraIssueTypeInputDTO)
-                .retrieve()
-                .bodyToMono(CloudJiraIssueTypeDTO.class).block();
+                CloudJiraIssueTypeDTO addCloudJirarIssueTypeDTO = jiraWebClient.post()
+                        .uri(endpoint)
+                        .bodyValue(cloudJiraIssueTypeInputDTO)
+                        .retrieve()
+                        .bodyToMono(CloudJiraIssueTypeDTO.class).block();
 
-        logger.info(addCloudJirarIssueTypeDTO.toString());
+                logger.info(addCloudJirarIssueTypeDTO.toString());
 
-		return addCloudJirarIssueTypeDTO;
+                return addCloudJirarIssueTypeDTO;
 	}
    
     

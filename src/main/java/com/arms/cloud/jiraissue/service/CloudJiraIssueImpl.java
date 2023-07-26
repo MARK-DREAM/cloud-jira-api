@@ -1,6 +1,8 @@
 package com.arms.cloud.jiraissue.service;
 
+import com.arms.cloud.jiraissue.domain.CloudJiraIssueDTO;
 import com.arms.cloud.jiraissue.domain.CloudJiraIssueInputDTO;
+import com.arms.cloud.jiraissue.domain.CloudJiraIssueSearchDTO;
 import com.arms.config.CloudJiraConfig;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -22,28 +24,47 @@ public class CloudJiraIssueImpl implements CloudJiraIssue {
     private CloudJiraConfig cloudJiraConfig;
 
     @Override
-    public String getIssue() {
+    public CloudJiraIssueSearchDTO getIssueSearch(String projectKeyOrId) {
         final WebClient jiraWebClient = cloudJiraConfig.getJiraWebClient();
 
-        String issueKey = "TEST-11";
-        String endpoint = "/rest/api/3/issue/" + issueKey;
+        String endpoint = "/rest/api/3/search?jql=project=" + projectKeyOrId;
 
-        Mono<String> response = jiraWebClient.get()
+        CloudJiraIssueSearchDTO response = jiraWebClient.get()
                 .uri(endpoint)
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(CloudJiraIssueSearchDTO.class).block();
 
-        String jsonResponse = response.block();
+        logger.info(response.toString());
+        return response;
+    }
 
-        return jsonResponse;
+    @Override
+    public CloudJiraIssueDTO getIssue(String issueKeyOrId) {
+        final WebClient jiraWebClient = cloudJiraConfig.getJiraWebClient();
+
+        String endpoint = "/rest/api/3/issue/" + issueKeyOrId;
+
+        CloudJiraIssueDTO response = jiraWebClient.get()
+                .uri(endpoint)
+                .retrieve()
+                .bodyToMono(CloudJiraIssueDTO.class).block();
+
+        String jsonResponse = response.toString();
+        logger.info(jsonResponse);
+
+        return response;
     }
 
     @Override
     public String createIssue(CloudJiraIssueInputDTO cloudJiraIssueInputDTO) throws Exception {
 
         final WebClient jiraWebClient = cloudJiraConfig.getJiraWebClient();
+        boolean updateHistory = true;
+        boolean applyDefaultValues = false;
+        boolean skipAutoWatch = true;
 
-        String endpoint = "/rest/api/2/issue";
+        String param = "?updateHistory=" + updateHistory + "&applyDefaultValues=" + applyDefaultValues + "&skipAutoWatch=" + skipAutoWatch;
+        String endpoint = "/rest/api/3/issue"+param;
 
         Mono<String> response = jiraWebClient.post()
                 .uri(endpoint)
