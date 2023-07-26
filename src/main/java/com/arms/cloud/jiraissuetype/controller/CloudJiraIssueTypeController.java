@@ -28,7 +28,7 @@ public class CloudJiraIssueTypeController {
 
     @ResponseBody
     @RequestMapping(
-            value = {"/getIssueTypeList.do"},
+            value = {"/list"},
             method = {RequestMethod.GET}
     )
     public List<CloudJiraIssueTypeDTO> getIssueTypeList(ModelMap model, HttpServletRequest request) throws Exception {
@@ -38,7 +38,7 @@ public class CloudJiraIssueTypeController {
 
     @ResponseBody
     @RequestMapping(
-            value = {"/createIssueType.do"},
+            value = {""},
             method = {RequestMethod.POST}
     )
     public CloudJiraIssueTypeDTO createIssueType(@RequestBody CloudJiraIssueTypeInputDTO cloudJiraIssueTypeInputDTO,

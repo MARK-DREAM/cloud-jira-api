@@ -33,14 +33,15 @@ public class CloudJiraOAuthController {
 
     @ResponseBody
     @RequestMapping(
-            value = {"/cloudJiraAuthorization.do"},
+            value = {"/check"},
             method = {RequestMethod.GET}
     )
-    public ResponseEntity<String> cloudJiraAuthorization(ModelMap model, HttpServletRequest request,
+    public ResponseEntity<String> cloudJiraAuthorization(ModelMap model,
+                                                            HttpServletRequest request,
                                                             HttpServletResponse response) throws Exception {
         logger.info("Jira Cloud PROJECT GET API 호출");
 
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(true);
         String autorizationUrl = "https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=h3G2k7xZbgBt5odGcGvKrqYhhIvtFTLh&scope=read%3Ajira-work%20manage%3Ajira-project%20manage%3Ajira-configuration%20read%3Ajira-user%20write%3Ajira-work%20manage%3Ajira-webhook%20manage%3Ajira-data-provider&redirect_uri=http%3A%2F%2Flocalhost%3A31313%2Fcloud%2Fjira%2Foauth%2Fcallback&state=${YOUR_USER_BOUND_VALUE}&response_type=code&prompt=consent";
         String uri = request.getRequestURI();
         logger.info(uri);
@@ -48,8 +49,6 @@ public class CloudJiraOAuthController {
         if(session == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(autorizationUrl);
         }
-
-        
 
         String accessToken = (String) session.getAttribute("ACCESS_TOKEN");
         if (accessToken == null || accessToken == "") {

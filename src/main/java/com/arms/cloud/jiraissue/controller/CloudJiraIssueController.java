@@ -26,7 +26,7 @@ public class CloudJiraIssueController {
 
     @ResponseBody
     @RequestMapping(
-            value = {"/getIssue.do/{projectKeyOrId}"},
+            value = {"/list/{projectKeyOrId}"},
             method = {RequestMethod.GET}
     )
     public CloudJiraIssueSearchDTO miningDataListToaRMS(@PathVariable String projectKeyOrId, ModelMap model, 
@@ -36,17 +36,17 @@ public class CloudJiraIssueController {
 
     @ResponseBody
     @RequestMapping(
-            value = {"/getIssue.do"},
+            value = {"/{issueKeyOrId}"},
             method = {RequestMethod.GET}
     )
-    public CloudJiraIssueDTO miningDataToaRMS(@RequestParam String issueKeyOrId, ModelMap model, 
+    public CloudJiraIssueDTO miningDataToaRMS(@PathVariable String issueKeyOrId, ModelMap model,
                                     HttpServletRequest request) throws Exception {
         return cloudJiraIssue.getIssue(issueKeyOrId);
     }
 
     @ResponseBody
     @RequestMapping(
-            value = {"/createIssue.do"},
+            value = {""},
             method = {RequestMethod.POST}
     )
     public String makeIssueForReqAdd(@RequestBody CloudJiraIssueInputDTO cloudJiraIssueInputDTO,
