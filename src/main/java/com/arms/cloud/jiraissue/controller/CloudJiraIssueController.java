@@ -1,7 +1,9 @@
 package com.arms.cloud.jiraissue.controller;
 
 
+import com.arms.cloud.jiraissue.domain.CloudJiraIssueDTO;
 import com.arms.cloud.jiraissue.domain.CloudJiraIssueInputDTO;
+import com.arms.cloud.jiraissue.domain.CloudJiraIssueSearchDTO;
 import com.arms.cloud.jiraissue.service.CloudJiraIssue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +26,23 @@ public class CloudJiraIssueController {
 
     @ResponseBody
     @RequestMapping(
+            value = {"/getIssue.do/{projectKeyOrId}"},
+            method = {RequestMethod.GET}
+    )
+    public CloudJiraIssueSearchDTO miningDataListToaRMS(@PathVariable String projectKeyOrId, ModelMap model, 
+                                    HttpServletRequest request) throws Exception {
+        return cloudJiraIssue.getIssueSearch(projectKeyOrId);
+    }
+
+    @ResponseBody
+    @RequestMapping(
             value = {"/getIssue.do"},
             method = {RequestMethod.GET}
     )
-    public String miningDataToaRMS(ModelMap model, HttpServletRequest request) throws Exception {
-        return cloudJiraIssue.getIssue();
+    public CloudJiraIssueDTO miningDataToaRMS(@RequestParam String issueKeyOrId, ModelMap model, 
+                                    HttpServletRequest request) throws Exception {
+        return cloudJiraIssue.getIssue(issueKeyOrId);
     }
-
 
     @ResponseBody
     @RequestMapping(
